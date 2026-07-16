@@ -1,15 +1,18 @@
-from database.api import Database
+from application.inspection import TableInfo, introspect_tables
+from config import DATABASE_URL
+from database.api import get_database
 
-def inspection_print_tables(inspector):
-    for table_name in inspector.get_table_names(schema="public"):
-        print(table_name, "-" * len(table_name), sep="\n")
-        columns = inspector.get_columns(table_name, schema="public")
-        print(*(f"{c['name']} {c['type']}" for c in columns), sep="\n", end="\n\n")
-        print("PKs:", inspector.get_pk_constraint(table_name), end="\n\n")
-        print("FKs:", inspector.get_foreign_keys(table_name), end="\n\n")
-        print("Indexes:", inspector.get_indexes(table_name), end="\n\n\n")
+
+def format_table(table: TableInfo) -> str:
+    lines = [table.name, "-" * len(table.name)]
+    lines += [f"{col_name} {col_type}" for col_name, col_type in table.columns]
+    lines += ["", f"PKs: {table.pks}"]
+    lines += ["", f"FKs: {table.fks}"]
+    lines += ["", f"Indexes: {table.indexes}"]
+    return "\n".join(lines)
+
 
 if __name__ == "__main__":
-    db_url = "postgresql+psycopg2://appuser:changeme@localhost:5432/dbpop-probe"
-    inspector = Database(db_url).inspector()
-    inspection_print_tables(inspector)
+    inspector = get_database(DATABASE_URL).inspector()
+    tables = introspect_tables(inspector)
+    print("\n\n\n".join(format_table(t) for t in tables))

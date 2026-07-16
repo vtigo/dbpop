@@ -5,11 +5,21 @@ from decimal import Decimal
 
 from sqlalchemy.orm import Session
 
-from database.api import Database
-from database.probe.tables import Address, Base, Category, Customer, Employee, Order, OrderItem, Payment, Product, Role, Supplier
-
-# TODO: extract configuration
-DATABASE_URL = "postgresql+psycopg2://appuser:changeme@localhost:5432/dbpop-probe"
+from config import DATABASE_URL
+from database.api import get_database, get_tables_handle
+from database.schemas.probe import (
+    Address,
+    Base,
+    Category,
+    Customer,
+    Employee,
+    Order,
+    OrderItem,
+    Payment,
+    Product,
+    Role,
+    Supplier,
+)
 
 
 def seed(session: Session) -> None:
@@ -60,9 +70,10 @@ def seed(session: Session) -> None:
 
 
 def main() -> None:
-    db = Database(DATABASE_URL)
-    db.drop_all(Base.metadata)
-    db.create_all(Base.metadata)
+    db = get_database(DATABASE_URL)
+    tables = get_tables_handle(db)
+    tables.drop_all(Base.metadata)
+    tables.create_all(Base.metadata)
     with db.session() as session:
         seed(session)
         session.commit()
