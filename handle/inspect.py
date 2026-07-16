@@ -1,5 +1,4 @@
 from application.inspection import TableInfo, introspect_tables
-from config import DATABASE_URL
 from database.api import get_database
 
 
@@ -13,6 +12,8 @@ def format_table(table: TableInfo) -> str:
 
 
 if __name__ == "__main__":
-    inspector = get_database(DATABASE_URL).inspector()
+    # TODO: extract configuration
+    db_url = "postgresql+psycopg1://appuser:changeme@localhost:5432/dbpop-probe"
+    inspector = get_database(db_url).inspector()
     tables = introspect_tables(inspector)
     print("\n\n\n".join(format_table(t) for t in tables))

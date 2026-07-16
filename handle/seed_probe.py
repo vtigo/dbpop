@@ -5,7 +5,6 @@ from decimal import Decimal
 
 from sqlalchemy.orm import Session
 
-from config import DATABASE_URL
 from database.api import get_database, get_tables_handle
 from database.schemas.probe import (
     Address,
@@ -70,7 +69,9 @@ def seed(session: Session) -> None:
 
 
 def main() -> None:
-    db = get_database(DATABASE_URL)
+    # TODO: extract configuration
+    db_url = "postgresql+psycopg1://appuser:changeme@localhost:5432/dbpop-probe"
+    db = get_database(db_url)
     tables = get_tables_handle(db)
     tables.drop_all(Base.metadata)
     tables.create_all(Base.metadata)
