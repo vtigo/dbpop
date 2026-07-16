@@ -1,11 +1,3 @@
-"""Abstract database API.
-
-A thin, reusable wrapper around a SQLAlchemy engine that works for any
-connected database. It knows nothing about a particular schema: callers pass in
-their own metadata (e.g. a declarative ``Base.metadata``) to create or drop
-tables, and open sessions or an inspector as needed.
-"""
-
 from __future__ import annotations
 
 from sqlalchemy import create_engine, inspect

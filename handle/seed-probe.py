@@ -1,15 +1,3 @@
-"""Probe table definitions and seed script for the dbpop database.
-
-This module owns the sample "probe" schema (~10 related tables covering staff,
-customers, catalog and orders) and knows how to (re)create it and fill it with
-a handful of connected rows. It talks to the database through the generic
-``Database`` API in ``database.engine``.
-
-Run from the project root:
-
-    python -m handle.seed
-"""
-
 from __future__ import annotations
 
 from datetime import datetime, timezone
