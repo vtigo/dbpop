@@ -1,6 +1,6 @@
 from database.api import Database
 
-def print_introspection(table_names: list[str]):
+def inspection_print_tables(inspector):
     for table_name in inspector.get_table_names(schema="public"):
         print(table_name, "-" * len(table_name), sep="\n")
         columns = inspector.get_columns(table_name, schema="public")
@@ -12,5 +12,4 @@ def print_introspection(table_names: list[str]):
 if __name__ == "__main__":
     db_url = "postgresql+psycopg2://appuser:changeme@localhost:5432/dbpop-probe"
     inspector = Database(db_url).inspector()
-    table_names = inspector.get_table_names(schema="public")
-    print_introspection(table_names)
+    inspection_print_tables(inspector)
